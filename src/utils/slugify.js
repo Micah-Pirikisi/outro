@@ -1,6 +1,9 @@
-const slugify = require("slugify");
+import slugify from "slugify";
 
-module.exports = function makeSlug(text) {
-  const base = slugify(text || "", { lower: true, strict: true });
-  return base || Math.random().toString(36).slice(2, 8);
-};
+export default function makeSlug(str) {
+  return slugify(str, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
+}

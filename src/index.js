@@ -6,16 +6,17 @@ import compression from "compression";
 import morgan from "morgan";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import { PrismaClient } from "@prisma/client";
+import prisma from "./lib/prisma.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-import authRoutes from "./controllers/auth.js";
-import postRoutes from "./controllers/posts.js";
-import commentRoutes from "./controllers/comments.js";
-import viewRoutes from "./controllers/views.js";
+import expressEjsLayouts from "express-ejs-layouts";
 
-const prisma = new PrismaClient();
+import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./routes/postsRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
+import viewRoutes from "./routes/viewRoutes.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -36,9 +37,14 @@ app.use("/public", express.static(join(__dirname, "..", "public")));
 const limiter = rateLimit({ windowMs: 60 * 1000, max: 120 });
 app.use(limiter);
 
-// View engine
+// Serve static files
+app.use("/public", express.static(path.join(process.cwd(), "src/public")));
+
+// View engine configuration
+app.use(expressEjsLayouts);
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.set("layout", "layout");
 
 // API routes
 app.use("/api/v1/auth", authRoutes);
@@ -56,9 +62,10 @@ app.use((err, req, res, next) => {
       .status(err.status || 500)
       .json({ error: err.message || "Internal server error" });
   } else {
-    res
-      .status(err.status || 500)
-      .render("error", { error: err.message || "Internal server error" });
+    res.status(err.status || 500).render("error", {
+      title: "Error",
+      error: err.message || "Internal server error",
+    });
   }
 });
 

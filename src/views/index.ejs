@@ -1,18 +1,134 @@
-<% layout('layout') -%> <% include('partials/hero') %>
+<% include('partials/hero') %> <% if (posts.length === 0) { %>
+<div
+  style="text-align: center; padding: 100px 40px; color: var(--text-secondary)"
+>
+  <p style="font-size: 18px; margin-bottom: 10px">Empty.</p>
+  <p style="font-size: 14px; font-family: sans-serif; letter-spacing: 0.5px">
+    For now.
+  </p>
+</div>
 
+<!-- PLACEHOLDER SECTION - REMOVE WHEN YOU HAVE REAL POSTS -->
 <section class="posts">
-  <% if (posts.length === 0) { %>
-  <p>No posts yet.</p>
-  <% } else { %> <% posts.forEach(p => { %>
-  <article class="post-summary">
-    <h2><a href="/post/<%= p.slug %>"><%= p.title %></a></h2>
-    <p class="meta">
-      By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new
-      Date(p.publishedAt).toDateString() : 'Draft' %>
+  <% for (let i = 0; i < 4; i++) { %>
+  <article class="post-card">
+    <div
+      class="cover"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.1) 0%,
+          rgba(212, 175, 55, 0.05) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+      "
+    >
+      <span>Story Cover</span>
+    </div>
+    <span class="type">NOVEL</span>
+    <h3>Sample Story <%= i + 1 %></h3>
+    <p class="meta">Anonymous — <%= new Date().toLocaleDateString() %></p>
+    <p class="excerpt">
+      This is a placeholder for your literary collection. Share novels, scripts,
+      short stories, and poetry in this vault.
     </p>
-    <% if (p.excerpt) { %>
-    <p><%= p.excerpt %></p>
+    <a href="#">Read Story</a>
+  </article>
+  <% } %>
+</section>
+<% } else { %>
+<!-- FEATURED STORIES - FIRST TWO POSTS -->
+<% if (posts.length > 0) { %>
+<section style="margin-bottom: 100px">
+  <% posts.slice(0, 2).forEach(p => { %>
+  <article class="featured-post">
+    <div>
+      <span class="type">
+        <% const typeMap = { 'novel': 'NOVEL', 'script': 'SCRIPT', 'poetry':
+        'POEM', 'short-story': 'SHORT STORY' }; const storyType =
+        p.tags?.[0]?.toLowerCase() || 'STORY'; %> <%= typeMap[storyType] ||
+        'STORY' %>
+      </span>
+      <h2><%= p.title %></h2>
+      <p class="meta">By <%= p.author?.name || p.author?.email %></p>
+      <p class="excerpt">
+        <%= p.excerpt || p.content.substring(0, 200) + '...' %>
+      </p>
+      <a href="/post/<%= p.slug %>">Open Story</a>
+    </div>
+    <% if (p.coverImage) { %>
+    <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover" />
+    <% } else { %>
+    <div
+      class="cover"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.1) 0%,
+          rgba(212, 175, 55, 0.05) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+      "
+    >
+      <span>Story Cover</span>
+    </div>
     <% } %>
   </article>
-  <% }) %> <% } %>
+  <% }) %>
 </section>
+<% } %>
+
+<!-- ALL STORIES GRID -->
+<section class="posts">
+  <% posts.forEach(p => { %>
+  <article class="post-card">
+    <% if (p.coverImage) { %>
+    <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover" />
+    <% } else { %>
+    <div
+      class="cover"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.1) 0%,
+          rgba(212, 175, 55, 0.05) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+      "
+    >
+      <span>Story Cover</span>
+    </div>
+    <% } %>
+
+    <span class="type">
+      <% const typeMap = { 'novel': 'NOVEL', 'script': 'SCRIPT', 'poetry':
+      'POEM', 'short-story': 'SHORT STORY' }; const storyType =
+      p.tags?.[0]?.toLowerCase() || 'STORY'; %> <%= typeMap[storyType] ||
+      'STORY' %>
+    </span>
+    <h3><%= p.title %></h3>
+    <p class="meta">
+      By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new
+      Date(p.publishedAt).toLocaleDateString() : 'Unreleased' %>
+    </p>
+
+    <% if (p.excerpt) { %>
+    <p class="excerpt"><%= p.excerpt %></p>
+    <% } else { %>
+    <p class="excerpt"><%= p.content.substring(0, 120) %>...</p>
+    <% } %>
+
+    <a href="/post/<%= p.slug %>">Open Story</a>
+  </article>
+  <% }) %>
+</section>
+<% } %>

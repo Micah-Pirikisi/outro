@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="/public/css/site.css" />
     <script src="/public/js/site.js" defer></script>
+    <script src="/public/js/menu.js" defer></script>
   </head>
   <body>
     <header>
-      <nav>
-        <a href="/">outro</a> |
-        <a href="/author">Author</a>
+      <nav class="site-nav">
+        <a class="brand" href="/">outro</a>
+
+        <button id="menu-toggle" aria-label="Open menu" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/tags/novel">Novels</a></li>
+          <li><a href="/tags/script">Scripts</a></li>
+          <li><a href="/tags/poetry">Poetry</a></li>
+          <li><a href="/tags/short-story">Short Stories</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/author">Author</a></li>
+        </ul>
       </nav>
     </header>
     <main><%- body %></main>

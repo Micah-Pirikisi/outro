@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma.js";
 import sanitizeHtml from "sanitize-html";
-
-const prisma = new PrismaClient();
 
 // Create comment (public)
 export const createComment = async (req, res, next) => {

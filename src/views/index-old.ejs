@@ -1,0 +1,75 @@
+<% include('partials/hero') %>
+
+<% if (posts.length === 0) { %>
+  <div style="text-align: center; padding: 60px 20px; color: #999;">
+    <p style="font-size: 18px;">No stories yet.</p>
+    <p style="font-size: 14px;">Check back soon for new articles.</p>
+  </div>
+
+  <!-- PLACEHOLDER SECTION - REMOVE WHEN YOU HAVE REAL POSTS -->
+  <section class="posts">
+    <% for (let i = 0; i < 3; i++) { %>
+      <article class="post-card">
+        <div class="cover" style="background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); display: flex; align-items: center; justify-content: center; color: #999;">
+          <span>Featured Image <%= i + 1 %></span>
+        </div>
+        <span class="type">ESSAY</span>
+        <h3>Sample Article Title <%= i + 1 %></h3>
+        <p class="meta">By Staff — <%= new Date().toDateString() %></p>
+        <p class="excerpt">This is a placeholder for your blog post. Replace with real content once you start publishing articles. Each post will display here with an image, title, author, and excerpt.</p>
+        <a href="#">Read More</a>
+      </article>
+    <% } %>
+  </section>
+<% } else { %>
+  <!-- FEATURED POSTS - FIRST TWO POSTS -->
+  <% if (posts.length > 0) { %>
+    <section style="margin-bottom: 80px;">
+      <% posts.slice(0, 2).forEach(p => { %>
+        <article class="featured-post">
+          <div>
+            <span class="type"><%= p.status === 'published' ? 'FEATURE' : 'DRAFT' %></span>
+            <h2><%= p.title %></h2>
+            <p class="meta">By <%= p.author?.name || p.author?.email %></p>
+            <p class="excerpt"><%= p.excerpt || p.content.substring(0, 150) + '...' %></p>
+            <a href="/post/<%= p.slug %>">Read More</a>
+          </div>
+          <% if (p.coverImage) { %>
+            <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover">
+          <% } else { %>
+            <div class="cover" style="background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); display: flex; align-items: center; justify-content: center; color: #999;">
+              <span>Featured Image</span>
+            </div>
+          <% } %>
+        </article>
+      <% }) %>
+    </section>
+  <% } %>
+
+  <!-- ALL POSTS GRID -->
+  <section class="posts">
+    <% posts.forEach(p => { %>
+      <article class="post-card">
+        <% if (p.coverImage) { %>
+          <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover">
+        <% } else { %>
+          <div class="cover" style="background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); display: flex; align-items: center; justify-content: center; color: #999;">
+            <span>Featured Image</span>
+          </div>
+        <% } %>
+        
+        <span class="type"><%= p.status === 'published' ? 'STORY' : 'DRAFT' %></span>
+        <h3><%= p.title %></h3>
+        <p class="meta">By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new Date(p.publishedAt).toDateString() : 'Draft' %></p>
+        
+        <% if (p.excerpt) { %>
+          <p class="excerpt"><%= p.excerpt %></p>
+        <% } else { %>
+          <p class="excerpt"><%= p.content.substring(0, 120) %>...</p>
+        <% } %>
+        
+        <a href="/post/<%= p.slug %>">Read More</a>
+      </article>
+    <% }) %>
+  </section>
+<% } %>

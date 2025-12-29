@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import sanitizeHtml from "sanitize-html";
 import makeSlug from "../utils/slugify.js";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma.js";
 
 // Public: list published posts with pagination
 export const listPosts = async (req, res, next) => {
