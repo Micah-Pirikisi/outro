@@ -1,0 +1,55 @@
+<% layout('layout') -%>
+<div id="author-app">
+  <h1>Authoring</h1>
+
+  <section id="auth">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input id="email" name="email" placeholder="Email" required />
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Password"
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
+  </section>
+
+  <section id="dashboard" style="display: none">
+    <button id="logout">Logout</button>
+    <h2>Your Posts</h2>
+    <button id="new-post">New Post</button>
+    <div id="posts-list"></div>
+
+    <div id="editor" style="display: none">
+      <h3 id="editor-title">New Post</h3>
+      <form id="post-form">
+        <input name="title" id="post-title" placeholder="Title" required />
+        <input name="excerpt" id="post-excerpt" placeholder="Excerpt" />
+        <input name="tags" id="post-tags" placeholder="tags,comma,separated" />
+        <input type="file" id="coverImage" name="coverImage" />
+        <textarea
+          name="content"
+          id="post-content"
+          placeholder="Content (HTML allowed)"
+        ></textarea>
+        <select id="post-status" name="status">
+          <option value="draft">Draft</option>
+          <option value="published">Publish</option>
+        </select>
+        <input type="hidden" id="post-id" />
+        <button type="submit">Save</button>
+      </form>
+      <button id="cancel-edit">Cancel</button>
+    </div>
+
+    <div id="moderation">
+      <h3>Comments (Pending)</h3>
+      <div id="pending-comments"></div>
+    </div>
+  </section>
+</div>
+
+<script src="/public/js/author.js"></script>

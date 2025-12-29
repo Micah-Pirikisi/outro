@@ -1,0 +1,18 @@
+<% layout('layout') -%> <% include('partials/hero') %>
+
+<section class="posts">
+  <% if (posts.length === 0) { %>
+  <p>No posts yet.</p>
+  <% } else { %> <% posts.forEach(p => { %>
+  <article class="post-summary">
+    <h2><a href="/post/<%= p.slug %>"><%= p.title %></a></h2>
+    <p class="meta">
+      By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new
+      Date(p.publishedAt).toDateString() : 'Draft' %>
+    </p>
+    <% if (p.excerpt) { %>
+    <p><%= p.excerpt %></p>
+    <% } %>
+  </article>
+  <% }) %> <% } %>
+</section>

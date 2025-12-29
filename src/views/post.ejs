@@ -1,0 +1,38 @@
+<% layout('layout') -%>
+<article class="post">
+  <h1><%= post.title %></h1>
+  <p class="meta">
+    By <%= post.author?.name || post.author?.email %> — <%= post.publishedAt ?
+    new Date(post.publishedAt).toDateString() : 'Draft' %>
+  </p>
+  <% if (post.coverImage) { %>
+  <img src="<%= post.coverImage %>" alt="cover" class="cover" />
+  <% } %>
+  <div class="content"><%- post.content %></div>
+
+  <section id="comments">
+    <h3>Comments</h3>
+    <% if (comments.length === 0) { %>
+    <p>No comments yet.</p>
+    <% } %> <% comments.forEach(c => { %>
+    <div class="comment">
+      <p>
+        <strong><%= c.author || 'Anonymous' %></strong> — <%= new
+        Date(c.createdAt).toLocaleString() %>
+      </p>
+      <p><%= c.body %></p>
+    </div>
+    <% }) %>
+
+    <form
+      id="comment-form"
+      action="/api/v1/comments/<%= post.id %>"
+      method="post"
+    >
+      <input name="author" placeholder="Name (optional)" />
+      <input name="email" placeholder="Email (optional)" />
+      <textarea name="body" placeholder="Write a comment" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </section>
+</article>
