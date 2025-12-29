@@ -31,14 +31,13 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: true })); // restrict in production
-app.use("/public", express.static(join(__dirname, "..", "public")));
 
 // Rate limiting (basic)
 const limiter = rateLimit({ windowMs: 60 * 1000, max: 120 });
 app.use(limiter);
 
 // Serve static files
-app.use("/public", express.static(path.join(process.cwd(), "src/public")));
+app.use("/public", express.static(join(__dirname, "public")));
 
 // View engine configuration
 app.use(expressEjsLayouts);
