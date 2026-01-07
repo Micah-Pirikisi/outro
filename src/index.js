@@ -24,6 +24,9 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Trust proxy (Railway sets X-Forwarded-For header)
+app.set("trust proxy", 1);
+
 // Middleware
 app.use(helmet());
 app.use(compression());
