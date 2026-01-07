@@ -144,8 +144,9 @@ document.getElementById("post-content").addEventListener("input", (e) => {
   const wordCount = e.target.value.trim().split(/\s+/).filter(w => w.length > 0).length;
   const display = document.getElementById("word-count-display");
   if (display) {
-    display.textContent = `${wordCount} words (minimum 6000)`;
-    display.style.color = wordCount < 6000 ? "var(--text-secondary)" : "var(--success)";
+    display.textContent = `${wordCount} words (maximum 6000)`;
+    // green when within limit, secondary when over
+    display.style.color = wordCount <= 6000 ? "var(--success)" : "var(--text-secondary)";
   }
 });
 

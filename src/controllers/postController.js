@@ -51,10 +51,10 @@ export const createPost = async (req, res, next) => {
   try {
     const { title, excerpt, content, tags } = req.body;
 
-    // Validate minimum word count
+    // Validate maximum word count
     const wordCount = content.trim().split(/\s+/).filter(w => w.length > 0).length;
-    if (wordCount < 6000) {
-      return res.status(400).json({ error: `Content must be at least 6000 words. Current: ${wordCount} words.` });
+    if (wordCount > 6000) {
+      return res.status(400).json({ error: `Content must be at most 6000 words. Current: ${wordCount} words.` });
     }
 
     // Slug generation
@@ -107,11 +107,11 @@ export const updatePost = async (req, res, next) => {
     if (existing.authorId !== req.user.id && req.user.role !== "admin")
       return res.status(403).json({ error: "Forbidden" });
 
-    // Validate minimum word count if content is being updated
+    // Validate maximum word count if content is being updated
     if (req.body.content) {
       const wordCount = req.body.content.trim().split(/\s+/).filter(w => w.length > 0).length;
-      if (wordCount < 6000) {
-        return res.status(400).json({ error: `Content must be at least 6000 words. Current: ${wordCount} words.` });
+      if (wordCount > 6000) {
+        return res.status(400).json({ error: `Content must be at most 6000 words. Current: ${wordCount} words.` });
       }
     }
 
