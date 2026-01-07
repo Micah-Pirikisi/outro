@@ -6,6 +6,7 @@ import auth from "../middleware/auth.js";
 import {
   listPosts,
   getPost,
+  getPostById,
   createPost,
   updatePost,
   togglePublishPost,
