@@ -28,6 +28,32 @@ export const listPosts = async (req, res, next) => {
   }
 };
 
+// Protected: list posts for authenticated author (include drafts)
+export const listMyPosts = async (req, res, next) => {
+  try {
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const per = Math.min(200, Number(req.query.per) || 100);
+    const skip = (page - 1) * per;
+
+    const where = { authorId: req.user.id };
+
+    const [posts, total] = await Promise.all([
+      prisma.post.findMany({
+        where,
+        orderBy: { updatedAt: "desc" },
+        skip,
+        take: per,
+        include: { author: true },
+      }),
+      prisma.post.count({ where }),
+    ]);
+
+    res.json({ posts, total, page, per });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Public: get single published post by slug
 export const getPost = async (req, res, next) => {
   try {

@@ -25,6 +25,7 @@ const upload = multer({ storage });
 
 // Public routes
 router.get("/", listPosts);
+router.get("/me", auth, listMyPosts);
 router.get("/:slug", getPost);
 
 // Protected routes

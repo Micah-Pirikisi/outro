@@ -30,12 +30,11 @@ document
   .addEventListener("click", () => setAuth(null));
 
 async function loadPosts() {
-  const res = await fetch(`${apiBase}/posts`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  // fetch public posts (published) for overview if needed
+  const res = await fetch(`${apiBase}/posts`, {});
   const data = await res.json();
-  // For authoring, we need drafts too — call protected endpoint to list all posts by author
-  const postsRes = await fetch(`${apiBase}/posts?per=100&page=1`, {
+  // For authoring, fetch protected list including drafts
+  const postsRes = await fetch(`${apiBase}/posts/me?per=200&page=1`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const postsData = await postsRes.json();
