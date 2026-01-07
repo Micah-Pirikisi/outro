@@ -28,11 +28,38 @@ export const postPage = async (req, res, next) => {
     // only show approved comments
     const comments = post.comments.filter((c) => c.approved);
 
-    res.render("post", { title: post.title, post, comments });
+    // Prepare content: remove duplicated leading title/author if author inserted them into content
+    let displayContent = post.content || "";
+    const title = post.title || "";
+    const authorName = post.author?.name || post.author?.email || "";
+
+    // Remove leading HTML heading that matches the title
+    try {
+      const h1Regex = new RegExp('^\\s*<h1[^>]*>\\s*' + escapeRegExp(title) + '\\s*</h1>', 'i');
+      if (h1Regex.test(displayContent)) displayContent = displayContent.replace(h1Regex, '');
+      // Remove a plain text title at start
+      const plainTitleRegex = new RegExp('^\\s*' + escapeRegExp(title) + '\\s*', 'i');
+      if (plainTitleRegex.test(displayContent)) displayContent = displayContent.replace(plainTitleRegex, '');
+      // Remove leading "by Author" lines
+      if (authorName) {
+        const byAuthorRegex = new RegExp('^\\s*(by\\s+' + escapeRegExp(authorName) + ')[\\s\\S]{0,200}?', 'i');
+        displayContent = displayContent.replace(byAuthorRegex, '');
+      }
+    } catch (e) {
+      // if any regex fails, fall back to original content
+      displayContent = post.content;
+    }
+
+    res.render("post", { title: post.title, post, comments, content: displayContent });
   } catch (err) {
     next(err);
   }
 };
+
+// helper to escape string for regex
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+}
 
 // Authoring SPA page
 export const authorPage = (req, res) => {

@@ -1,9 +1,5 @@
 <article class="post">
   <h1><%= post.title %></h1>
-  <div class="meta">
-    By <strong><%= post.author?.name || post.author?.email %></strong> — <%=
-    post.publishedAt ? new Date(post.publishedAt).toDateString() : 'Draft' %>
-  </div>
 
   <% if (post.coverImage) { %>
   <img src="<%= post.coverImage %>" alt="<%= post.title %>" class="cover" />
@@ -24,7 +20,11 @@
   </div>
   <% } %>
 
-  <div class="content"><%- post.content %></div>
+  <div class="meta" style="margin-top: 16px; color: #777;">
+    By <strong><%= post.author?.name || post.author?.email %></strong> — <%= post.publishedAt ? new Date(post.publishedAt).toDateString() : 'Draft' %>
+  </div>
+
+  <div class="content"><%- content || post.content %></div>
 
   <section
     id="comments"
