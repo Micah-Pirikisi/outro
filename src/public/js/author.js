@@ -33,14 +33,35 @@ async function loadPosts() {
   // fetch public posts (published) for overview if needed
   const res = await fetch(`${apiBase}/posts`, {});
   const data = await res.json();
-  // For authoring, fetch protected list including drafts
+  // For authoring, fetch protected list including drafts (only if we have a token)
+  const list = document.getElementById("posts-list");
+  list.innerHTML = "";
+  if (!token) {
+    // not authenticated: show an empty list or a message
+    list.innerHTML = '<div style="color:#999">Log in to see your drafts and private posts.</div>';
+    return;
+  }
+
   const postsRes = await fetch(`${apiBase}/posts/me?per=200&page=1`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+  if (!postsRes.ok) {
+    if (postsRes.status === 401) {
+      // token invalid or expired
+      setAuth(null);
+      alert('Session expired — please log in again');
+      return;
+    }
+    // other errors
+    console.error('Failed fetching author posts', postsRes.status);
+    list.innerHTML = '<div style="color:#999">Unable to load your posts.</div>';
+    return;
+  }
+
   const postsData = await postsRes.json();
-  const list = document.getElementById("posts-list");
-  list.innerHTML = "";
-  postsData.posts.forEach((p) => {
+  const postsArray = (postsData && postsData.posts) || [];
+  postsArray.forEach((p) => {
     const el = document.createElement("div");
     el.innerHTML = `<strong>${p.title}</strong> — ${
       p.status
