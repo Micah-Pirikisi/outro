@@ -10,6 +10,7 @@ import {
   updatePost,
   togglePublishPost,
   deletePost,
+  listMyPosts,
 } from "../controllers/postController.js";
 
 const router = express.Router();
