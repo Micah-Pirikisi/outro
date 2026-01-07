@@ -24,9 +24,9 @@
     <%= post.publishedAt ? new Date(post.publishedAt).toDateString() : 'Draft'
     %>
   </div>
-  <% if (post.author && (post.author.name || post.author.email)) { %>
-  <div class="meta" style="margin-top: 6px; color: #777">
-    by <%= post.author.name || post.author.email %>
+  <% if (displayAuthor) { %>
+  <div class="meta" style="margin-top: 6px; color: #777;">
+    by <%= displayAuthor %>
   </div>
   <% } %>
 

@@ -82,11 +82,30 @@ export const postPage = async (req, res, next) => {
       displayContent = post.content;
     }
 
+    // Compute a display author name: prefer full name; if only first name stored, try to infer surname from email local-part
+    let displayAuthor = post.author?.name || post.author?.email || '';
+    try {
+      if (displayAuthor && !displayAuthor.includes(' ') && post.author?.email) {
+        const local = post.author.email.split('@')[0];
+        const first = displayAuthor.toLowerCase();
+        if (local.startsWith(first) && local.length > first.length + 1) {
+          const remainder = local.slice(first.length);
+          // split remainder into words on non-letters (if any), else use remainder as surname
+          const parts = remainder.split(/[^a-zA-Z]+/).filter(Boolean);
+          const surname = parts.length ? parts.map(p => p[0].toUpperCase() + p.slice(1)).join(' ') : remainder[0].toUpperCase() + remainder.slice(1);
+          displayAuthor = displayAuthor + ' ' + surname;
+        }
+      }
+    } catch (e) {
+      // ignore and use original
+    }
+
     res.render("post", {
       title: post.title,
       post,
       comments,
       content: displayContent,
+      displayAuthor,
     });
   } catch (err) {
     next(err);
