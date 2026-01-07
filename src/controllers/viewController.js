@@ -48,15 +48,22 @@ export const aboutPage = (req, res) => {
 export const tagPage = async (req, res, next) => {
   try {
     const tag = req.params.tag;
+    const tagLabels = {
+      novel: "Novels",
+      script: "Scripts",
+      poetry: "Poetry",
+      "short-story": "Short Stories",
+    };
+    const displayTag = tagLabels[tag] || tag.charAt(0).toUpperCase() + tag.slice(1);
     const posts = await prisma.post.findMany({
       where: { status: "published", tags: { has: tag } },
       orderBy: { publishedAt: "desc" },
       include: { author: true },
     });
     res.render("tag", {
-      title: tag.charAt(0).toUpperCase() + tag.slice(1),
+      title: displayTag,
       posts,
-      tag,
+      tag: displayTag,
     });
   } catch (err) {
     next(err);
