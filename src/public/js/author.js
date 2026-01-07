@@ -140,5 +140,33 @@ document.getElementById("cancel-edit").addEventListener("click", () => {
   document.getElementById("editor").style.display = "none";
 });
 
+document.getElementById("preview-btn").addEventListener("click", () => {
+  const title = document.getElementById("post-title").value || "Untitled";
+  const content = document.getElementById("post-content").value || "<p>No content</p>";
+  const excerpt = document.getElementById("post-excerpt").value;
+  
+  const previewHtml = `
+    <h1 style="font-size: 48px; font-weight: 400; margin: 0 0 30px 0;">${title.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</h1>
+    <div style="color: var(--text-secondary); margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border);">
+      <span style="font-size: 14px;">Preview Mode</span>
+    </div>
+    <div style="line-height: 1.8; color: var(--text-primary);">${content}</div>
+  `;
+  
+  document.getElementById("preview-content").innerHTML = previewHtml;
+  document.getElementById("preview-modal").style.display = "block";
+});
+
+document.getElementById("close-preview").addEventListener("click", () => {
+  document.getElementById("preview-modal").style.display = "none";
+});
+
+// Close preview when clicking outside the content
+document.getElementById("preview-modal").addEventListener("click", (e) => {
+  if (e.target.id === "preview-modal") {
+    document.getElementById("preview-modal").style.display = "none";
+  }
+});
+
 // initialize
 setAuth(token);
