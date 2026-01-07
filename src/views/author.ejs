@@ -79,12 +79,15 @@
           />
         </div>
         <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">Content (HTML allowed)</label>
+          <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">Content (HTML allowed) — <span id="word-count-display" style="color: var(--text-secondary);">0 words (minimum 6000)</span></label>
+          <p style="margin: 0 0 12px 0; padding: 12px; background: var(--bg-secondary); border-left: 3px solid var(--accent); font-size: 13px; color: var(--text-secondary);">
+            <strong>Formatting Guidelines:</strong> Double-spaced lines, font size 12. Use &lt;p&gt; tags for paragraphs. For stories/novels, indent first line of paragraphs. For poems, use left alignment with &lt;br&gt; for line breaks.
+          </p>
           <textarea
             name="content"
             id="post-content"
             placeholder="Write your content here..."
-            style="width: 100%; padding: 14px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 14px; min-height: 400px;"
+            style="width: 100%; padding: 14px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 14px; min-height: 400px; line-height: 2;"
           ></textarea>
         </div>
         <div style="display: flex; gap: 15px;">

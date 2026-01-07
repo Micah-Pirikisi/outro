@@ -140,7 +140,14 @@ document.getElementById("cancel-edit").addEventListener("click", () => {
   document.getElementById("editor").style.display = "none";
 });
 
-document.getElementById("preview-btn").addEventListener("click", () => {
+document.getElementById("post-content").addEventListener("input", (e) => {
+  const wordCount = e.target.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const display = document.getElementById("word-count-display");
+  if (display) {
+    display.textContent = `${wordCount} words (minimum 6000)`;
+    display.style.color = wordCount < 6000 ? "var(--text-secondary)" : "var(--success)";
+  }
+});
   const title = document.getElementById("post-title").value || "Untitled";
   const content = document.getElementById("post-content").value || "<p>No content</p>";
   const excerpt = document.getElementById("post-excerpt").value;
