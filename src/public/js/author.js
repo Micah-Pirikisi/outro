@@ -148,6 +148,8 @@ document.getElementById("post-content").addEventListener("input", (e) => {
     display.style.color = wordCount < 6000 ? "var(--text-secondary)" : "var(--success)";
   }
 });
+
+document.getElementById("preview-btn").addEventListener("click", () => {
   const title = document.getElementById("post-title").value || "Untitled";
   const content = document.getElementById("post-content").value || "<p>No content</p>";
   const excerpt = document.getElementById("post-excerpt").value;
