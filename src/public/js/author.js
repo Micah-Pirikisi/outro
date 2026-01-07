@@ -66,7 +66,8 @@ async function loadPosts() {
       document.getElementById("post-title").value = post.title;
       document.getElementById("post-excerpt").value = post.excerpt || "";
       document.getElementById("post-content").value = post.content || "";
-      document.getElementById("post-tags").value = (post.tags || []).join(",");
+      // set category select to the first tag (if any)
+      document.getElementById("post-tags").value = (post.tags && post.tags[0]) || "";
       document.getElementById("post-status").value = post.status;
     })
   );
@@ -114,6 +115,7 @@ document.getElementById("post-form").addEventListener("submit", async (e) => {
   form.append("title", document.getElementById("post-title").value);
   form.append("excerpt", document.getElementById("post-excerpt").value);
   form.append("content", document.getElementById("post-content").value);
+  // tags is a single category value from the select
   form.append("tags", document.getElementById("post-tags").value);
   form.append("status", document.getElementById("post-status").value);
   const file = document.getElementById("coverImage").files[0];
