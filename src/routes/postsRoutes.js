@@ -27,6 +27,8 @@ const upload = multer({ storage });
 // Public routes
 router.get("/", listPosts);
 router.get("/me", auth, listMyPosts);
+// allow authors to fetch by id (for editing) — protected
+router.get("/id/:id", auth, getPostById);
 router.get("/:slug", getPost);
 
 // Protected routes

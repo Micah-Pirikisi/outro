@@ -72,15 +72,36 @@ export const getPost = async (req, res, next) => {
   }
 };
 
+// Protected: get single post by id for its author or admin (includes drafts)
+export const getPostById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const post = await prisma.post.findUnique({ where: { id }, include: { author: true, comments: true } });
+    if (!post) return res.status(404).json({ error: 'Not found' });
+    // allow owner or admin
+    if (post.authorId !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
+    res.json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Protected: create post
 export const createPost = async (req, res, next) => {
   try {
     const { title, excerpt, content, tags } = req.body;
 
     // Validate maximum word count
-    const wordCount = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const wordCount = content
+      .trim()
+      .split(/\s+/)
+      .filter((w) => w.length > 0).length;
     if (wordCount > 6000) {
-      return res.status(400).json({ error: `Content must be at most 6000 words. Current: ${wordCount} words.` });
+      return res
+        .status(400)
+        .json({
+          error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
+        });
     }
 
     // Slug generation
@@ -135,9 +156,16 @@ export const updatePost = async (req, res, next) => {
 
     // Validate maximum word count if content is being updated
     if (req.body.content) {
-      const wordCount = req.body.content.trim().split(/\s+/).filter(w => w.length > 0).length;
+      const wordCount = req.body.content
+        .trim()
+        .split(/\s+/)
+        .filter((w) => w.length > 0).length;
       if (wordCount > 6000) {
-        return res.status(400).json({ error: `Content must be at most 6000 words. Current: ${wordCount} words.` });
+        return res
+          .status(400)
+          .json({
+            error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
+          });
       }
     }
 

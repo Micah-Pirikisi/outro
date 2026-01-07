@@ -38,7 +38,8 @@ async function loadPosts() {
   list.innerHTML = "";
   if (!token) {
     // not authenticated: show an empty list or a message
-    list.innerHTML = '<div style="color:#999">Log in to see your drafts and private posts.</div>';
+    list.innerHTML =
+      '<div style="color:#999">Log in to see your drafts and private posts.</div>';
     return;
   }
 
@@ -50,11 +51,11 @@ async function loadPosts() {
     if (postsRes.status === 401) {
       // token invalid or expired
       setAuth(null);
-      alert('Session expired — please log in again');
+      alert("Session expired — please log in again");
       return;
     }
     // other errors
-    console.error('Failed fetching author posts', postsRes.status);
+    console.error("Failed fetching author posts", postsRes.status);
     list.innerHTML = '<div style="color:#999">Unable to load your posts.</div>';
     return;
   }
@@ -77,7 +78,7 @@ async function loadPosts() {
   document.querySelectorAll(".edit").forEach((btn) =>
     btn.addEventListener("click", async (e) => {
       const id = e.target.dataset.id;
-      const r = await fetch(`/api/v1/posts/${id}`, {
+      const r = await fetch(`/api/v1/posts/id/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const post = await r.json();
@@ -87,7 +88,8 @@ async function loadPosts() {
       document.getElementById("post-excerpt").value = post.excerpt || "";
       document.getElementById("post-content").value = post.content || "";
       // set category select to the first tag (if any)
-      document.getElementById("post-tags").value = (post.tags && post.tags[0]) || "";
+      document.getElementById("post-tags").value =
+        (post.tags && post.tags[0]) || "";
       document.getElementById("post-status").value = post.status;
     })
   );
@@ -163,28 +165,35 @@ document.getElementById("cancel-edit").addEventListener("click", () => {
 });
 
 document.getElementById("post-content").addEventListener("input", (e) => {
-  const wordCount = e.target.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const wordCount = e.target.value
+    .trim()
+    .split(/\s+/)
+    .filter((w) => w.length > 0).length;
   const display = document.getElementById("word-count-display");
   if (display) {
     display.textContent = `${wordCount} words (maximum 6000)`;
     // green when within limit, secondary when over
-    display.style.color = wordCount <= 6000 ? "var(--success)" : "var(--text-secondary)";
+    display.style.color =
+      wordCount <= 6000 ? "var(--success)" : "var(--text-secondary)";
   }
 });
 
 document.getElementById("preview-btn").addEventListener("click", () => {
   const title = document.getElementById("post-title").value || "Untitled";
-  const content = document.getElementById("post-content").value || "<p>No content</p>";
+  const content =
+    document.getElementById("post-content").value || "<p>No content</p>";
   const excerpt = document.getElementById("post-excerpt").value;
-  
+
   const previewHtml = `
-    <h1 style="font-size: 48px; font-weight: 400; margin: 0 0 30px 0;">${title.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</h1>
+    <h1 style="font-size: 48px; font-weight: 400; margin: 0 0 30px 0;">${title
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")}</h1>
     <div style="color: var(--text-secondary); margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border);">
       <span style="font-size: 14px;">Preview Mode</span>
     </div>
     <div style="line-height: 1.8; color: var(--text-primary);">${content}</div>
   `;
-  
+
   document.getElementById("preview-content").innerHTML = previewHtml;
   document.getElementById("preview-modal").style.display = "block";
 });
