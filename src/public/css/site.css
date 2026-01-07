@@ -178,6 +178,35 @@ header nav a:hover {
   color: var(--text-accent);
 }
 
+/* Poem styling: preserve line breaks and use serif font */
+.poem {
+  white-space: pre-wrap;
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  line-height: 1.75;
+  color: #fff;
+  text-align: left;
+}
+
+/* Navbar link hover underline animation */
+header nav a {
+  display: inline-block;
+  position: relative;
+}
+header nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 0;
+  background: var(--text-accent);
+  transition: width 0.22s ease;
+}
+header nav a:hover::after {
+  width: 100%;
+}
+
 /* ========== MAIN CONTENT ========== */
 main {
   max-width: 1400px;
