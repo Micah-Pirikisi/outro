@@ -28,7 +28,18 @@ const __dirname = dirname(__filename);
 app.set("trust proxy", 1);
 
 // Middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrcAttr: ["'self'"],
+      },
+    },
+  })
+);
 app.use(compression());
 app.use(morgan("dev"));
 app.use(express.json({ limit: "2mb" }));
