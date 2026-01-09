@@ -5,12 +5,16 @@ import {
   createComment,
   approveComment,
   deleteComment,
+  getPendingComments,
 } from "../controllers/commentController.js";
 
 const router = express.Router();
 
 // Rate limiter for creating comments
 const commentLimiter = rateLimit({ windowMs: 60 * 1000, max: 6 });
+
+// Protected routes (must come before parameterized routes)
+router.get("/pending", auth, getPendingComments);
 
 // Public route: create comment
 router.post("/:postId", commentLimiter, createComment);
