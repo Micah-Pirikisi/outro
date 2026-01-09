@@ -33,9 +33,6 @@ document
   .addEventListener("click", () => setAuth(null));
 
 async function loadPosts() {
-  // fetch public posts (published) for overview if needed
-  const res = await fetch(`${apiBase}/posts`, {});
-  const data = await res.json();
   // For authoring, fetch protected list including drafts (only if we have a token)
   const list = document.getElementById("posts-list");
   list.innerHTML = "";
@@ -246,14 +243,20 @@ async function loadPendingComments() {
         <p style="margin:8px 0; font-size:14px;"><strong>${
           c.author || "Anonymous"
         }</strong> ${c.email ? `(${c.email})` : ""}</p>
-        <p style="margin:8px 0; line-height:1.6; color: var(--text-secondary);">${c.body}</p>
+        <p style="margin:8px 0; line-height:1.6; color: var(--text-secondary);">${
+          c.body
+        }</p>
         <p style="margin:8px 0; font-size:12px; color:#999;">
           ${new Date(c.createdAt).toLocaleDateString()}
         </p>
       </div>
       <div style="display:flex; gap:10px;">
-        <button data-id="${c.id}" class="approve-comment" style="padding:8px 16px; background:var(--success); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Approve</button>
-        <button data-id="${c.id}" class="delete-comment" style="padding:8px 16px; background:var(--error); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Delete</button>
+        <button data-id="${
+          c.id
+        }" class="approve-comment" style="padding:8px 16px; background:var(--success); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Approve</button>
+        <button data-id="${
+          c.id
+        }" class="delete-comment" style="padding:8px 16px; background:var(--error); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Delete</button>
       </div>
     `;
     container.appendChild(el);
