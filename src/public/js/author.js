@@ -8,7 +8,10 @@ function setAuth(t) {
   else localStorage.removeItem("sanctuary_token");
   document.getElementById("dashboard").style.display = t ? "block" : "none";
   document.getElementById("auth").style.display = t ? "none" : "block";
-  if (t) loadPosts();
+  if (t) {
+    loadPosts();
+    loadPendingComments();
+  }
 }
 
 document.getElementById("login-form").addEventListener("submit", async (e) => {
