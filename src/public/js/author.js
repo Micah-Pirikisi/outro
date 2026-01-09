@@ -290,6 +290,3 @@ async function loadPendingComments() {
 
 // initialize
 setAuth(token);
-
-// initialize
-setAuth(token);
