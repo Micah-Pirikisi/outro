@@ -10,6 +10,10 @@ export const createComment = async (req, res, next) => {
     if (!body || body.length < 2)
       return res.status(400).json({ error: "Comment body required" });
 
+    // Verify post exists
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+    if (!post) return res.status(404).json({ error: "Post not found" });
+
     const sanitized = sanitizeHtml(body, {
       allowedTags: [],
       allowedAttributes: {},
