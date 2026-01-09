@@ -83,3 +83,30 @@ export const deleteComment = async (req, res, next) => {
     next(err);
   }
 };
+
+// Get pending comments (protected)
+export const getPendingComments = async (req, res, next) => {
+  try {
+    // Get all posts by this user
+    const userPosts = await prisma.post.findMany({
+      where: { authorId: req.user.id },
+      select: { id: true },
+    });
+
+    const postIds = userPosts.map((p) => p.id);
+
+    // Get all unapproved comments on those posts
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId: { in: postIds },
+        approved: false,
+      },
+      include: { post: { select: { title: true, slug: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json({ comments });
+  } catch (err) {
+    next(err);
+  }
+};
