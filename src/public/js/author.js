@@ -212,5 +212,81 @@ document.getElementById("preview-modal").addEventListener("click", (e) => {
   }
 });
 
+// Load pending comments
+async function loadPendingComments() {
+  const res = await fetch(`${apiBase}/comments/pending`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    console.error("Failed fetching pending comments", res.status);
+    return;
+  }
+
+  const data = await res.json();
+  const comments = data.comments || [];
+  const container = document.getElementById("pending-comments");
+  container.innerHTML = "";
+
+  if (comments.length === 0) {
+    container.innerHTML = '<div style="color:#999">No pending comments.</div>';
+    return;
+  }
+
+  comments.forEach((c) => {
+    const el = document.createElement("div");
+    el.style.cssText =
+      "padding:20px; margin-bottom:20px; border:1px solid var(--border); background: var(--bg-secondary); border-radius: 4px;";
+    el.innerHTML = `
+      <div style="margin-bottom:10px;">
+        <strong>${c.post.title}</strong>
+        <span style="color:#999; font-size:12px;">(${c.post.slug})</span>
+      </div>
+      <div style="margin-bottom:10px;">
+        <p style="margin:8px 0; font-size:14px;"><strong>${
+          c.author || "Anonymous"
+        }</strong> ${c.email ? `(${c.email})` : ""}</p>
+        <p style="margin:8px 0; line-height:1.6; color: var(--text-secondary);">${c.body}</p>
+        <p style="margin:8px 0; font-size:12px; color:#999;">
+          ${new Date(c.createdAt).toLocaleDateString()}
+        </p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button data-id="${c.id}" class="approve-comment" style="padding:8px 16px; background:var(--success); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Approve</button>
+        <button data-id="${c.id}" class="delete-comment" style="padding:8px 16px; background:var(--error); color:var(--bg-primary); border:none; cursor:pointer; font-size:12px; border-radius:3px;">Delete</button>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+
+  // Attach event listeners to approve buttons
+  document.querySelectorAll(".approve-comment").forEach((btn) =>
+    btn.addEventListener("click", async (e) => {
+      const id = e.target.dataset.id;
+      await fetch(`${apiBase}/comments/${id}/approve`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadPendingComments();
+    })
+  );
+
+  // Attach event listeners to delete buttons
+  document.querySelectorAll(".delete-comment").forEach((btn) =>
+    btn.addEventListener("click", async (e) => {
+      if (!confirm("Delete comment?")) return;
+      const id = e.target.dataset.id;
+      await fetch(`${apiBase}/comments/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadPendingComments();
+    })
+  );
+}
+
+// initialize
+setAuth(token);
+
 // initialize
 setAuth(token);
