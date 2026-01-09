@@ -10,8 +10,8 @@ export const createComment = async (req, res, next) => {
     if (!body || body.length < 2)
       return res.status(400).json({ error: "Comment body required" });
 
-    // Verify post exists
-    const post = await prisma.post.findUnique({ where: { id: postId } });
+    // Verify post exists (postId is the slug from URL)
+    const post = await prisma.post.findUnique({ where: { slug: postId } });
     if (!post) return res.status(404).json({ error: "Post not found" });
 
     const sanitized = sanitizeHtml(body, {
@@ -20,7 +20,7 @@ export const createComment = async (req, res, next) => {
     });
 
     const comment = await prisma.comment.create({
-      data: { postId, author, email, body: sanitized, approved: false },
+      data: { postId: post.id, author, email, body: sanitized, approved: false },
     });
 
     res.status(201).json(comment);
