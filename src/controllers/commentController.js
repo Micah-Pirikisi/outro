@@ -20,7 +20,13 @@ export const createComment = async (req, res, next) => {
     });
 
     const comment = await prisma.comment.create({
-      data: { postId: post.id, author, email, body: sanitized, approved: false },
+      data: {
+        postId: post.id,
+        author,
+        email,
+        body: sanitized,
+        approved: false,
+      },
     });
 
     res.status(201).json(comment);
