@@ -16,7 +16,14 @@
   <% } %>
 
   <% if (post.document) { %>
-  <div style="margin: 20px 0; padding: 15px; background: var(--bg-secondary); border-left: 2px solid var(--text-accent);">
+  <div style="margin: 20px 0; padding: 15px; background: var(--bg-secondary); border-left: 2px solid var(--text-accent); display: flex; gap: 10px;">
+    <a 
+      href="<%= post.document.replace('/public/', '/') %>" 
+      target="_blank"
+      class="pdf-download-btn"
+    >
+      View PDF
+    </a>
     <a 
       href="<%= post.document.replace('/public/', '/') %>" 
       download 

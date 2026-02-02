@@ -37,14 +37,14 @@ export const postPage = async (req, res, next) => {
     try {
       const h1Regex = new RegExp(
         "^\\s*<h1[^>]*>\\s*" + escapeRegExp(title) + "\\s*</h1>",
-        "i"
+        "i",
       );
       if (h1Regex.test(displayContent))
         displayContent = displayContent.replace(h1Regex, "");
       // Remove a plain text title at start
       const plainTitleRegex = new RegExp(
         "^\\s*" + escapeRegExp(title) + "\\s*",
-        "i"
+        "i",
       );
       if (plainTitleRegex.test(displayContent))
         displayContent = displayContent.replace(plainTitleRegex, "");
@@ -52,7 +52,7 @@ export const postPage = async (req, res, next) => {
       if (authorName) {
         const byAuthorRegex = new RegExp(
           "^\\s*(by\\s+" + escapeRegExp(authorName) + ")[\\s\\S]{0,200}?",
-          "i"
+          "i",
         );
         displayContent = displayContent.replace(byAuthorRegex, "");
       }
@@ -66,34 +66,46 @@ export const postPage = async (req, res, next) => {
       } catch (e) {
         // ignore
       }
-        // Normalize any short "by <FirstName>" in content to the author's full name
-        try {
-          const fullAuthor = post.author?.name || post.author?.email || '';
-          const firstName = fullAuthor.split(' ')[0];
-          if (firstName && fullAuthor && firstName.toLowerCase() !== fullAuthor.toLowerCase()) {
-            const byFirstRegex = new RegExp('\\bby\\s+' + escapeRegExp(firstName) + '\\b', 'gi');
-            displayContent = displayContent.replace(byFirstRegex, 'by ' + fullAuthor);
-          }
-        } catch (e) {
-          // ignore
+      // Normalize any short "by <FirstName>" in content to the author's full name
+      try {
+        const fullAuthor = post.author?.name || post.author?.email || "";
+        const firstName = fullAuthor.split(" ")[0];
+        if (
+          firstName &&
+          fullAuthor &&
+          firstName.toLowerCase() !== fullAuthor.toLowerCase()
+        ) {
+          const byFirstRegex = new RegExp(
+            "\\bby\\s+" + escapeRegExp(firstName) + "\\b",
+            "gi",
+          );
+          displayContent = displayContent.replace(
+            byFirstRegex,
+            "by " + fullAuthor,
+          );
         }
+      } catch (e) {
+        // ignore
+      }
     } catch (e) {
       // if any regex fails, fall back to original content
       displayContent = post.content;
     }
 
     // Compute a display author name: prefer full name; if only first name stored, try to infer surname from email local-part
-    let displayAuthor = post.author?.name || post.author?.email || '';
+    let displayAuthor = post.author?.name || post.author?.email || "";
     try {
-      if (displayAuthor && !displayAuthor.includes(' ') && post.author?.email) {
-        const local = post.author.email.split('@')[0];
+      if (displayAuthor && !displayAuthor.includes(" ") && post.author?.email) {
+        const local = post.author.email.split("@")[0];
         const first = displayAuthor.toLowerCase();
         if (local.startsWith(first) && local.length > first.length + 1) {
           const remainder = local.slice(first.length);
           // split remainder into words on non-letters (if any), else use remainder as surname
           const parts = remainder.split(/[^a-zA-Z]+/).filter(Boolean);
-          const surname = parts.length ? parts.map(p => p[0].toUpperCase() + p.slice(1)).join(' ') : remainder[0].toUpperCase() + remainder.slice(1);
-          displayAuthor = displayAuthor + ' ' + surname;
+          const surname = parts.length
+            ? parts.map((p) => p[0].toUpperCase() + p.slice(1)).join(" ")
+            : remainder[0].toUpperCase() + remainder.slice(1);
+          displayAuthor = displayAuthor + " " + surname;
         }
       }
     } catch (e) {
@@ -103,14 +115,14 @@ export const postPage = async (req, res, next) => {
     // Extract style tags from content so they can be added to document head
     const styleRegex = /<style[^>]*>[\s\S]*?<\/style>/gi;
     const styles = displayContent.match(styleRegex) || [];
-    const contentWithoutStyles = displayContent.replace(styleRegex, '');
+    const contentWithoutStyles = displayContent.replace(styleRegex, "");
 
     res.render("post", {
       title: post.title,
       post,
       comments,
       content: contentWithoutStyles,
-      styles: styles.join('\n'),
+      styles: styles.join("\n"),
       displayAuthor,
     });
   } catch (err) {

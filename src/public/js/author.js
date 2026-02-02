@@ -189,19 +189,21 @@ document.getElementById("preview-btn").addEventListener("click", () => {
   // Extract style tags and add them to document head
   const styleRegex = /<style[^>]*>[\s\S]*?<\/style>/gi;
   const styles = content.match(styleRegex) || [];
-  
+
   // Remove existing preview styles
-  document.querySelectorAll('[data-preview-style]').forEach(el => el.remove());
-  
+  document
+    .querySelectorAll("[data-preview-style]")
+    .forEach((el) => el.remove());
+
   // Add new styles to head
-  styles.forEach(style => {
-    const wrapper = document.createElement('div');
+  styles.forEach((style) => {
+    const wrapper = document.createElement("div");
     wrapper.innerHTML = style;
-    wrapper.setAttribute('data-preview-style', 'true');
+    wrapper.setAttribute("data-preview-style", "true");
     document.head.appendChild(wrapper.firstChild);
   });
 
-  const contentWithoutStyles = content.replace(styleRegex, '');
+  const contentWithoutStyles = content.replace(styleRegex, "");
 
   const previewHtml = `
     <h1 style="font-size: 48px; font-weight: 400; margin: 0 0 30px 0;">${title
