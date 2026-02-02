@@ -17,13 +17,12 @@
 
   <% if (post.document) { %>
   <div style="margin: 20px 0; padding: 15px; background: var(--bg-secondary); border-left: 2px solid var(--text-accent);">
-    <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 14px; color: var(--text-primary);">Attached Document</p>
     <a 
       href="<%= post.document.replace('/public/', '/') %>" 
       download 
       class="pdf-download-btn"
     >
-      📥 Download PDF
+      Download PDF
     </a>
   </div>
   <% } %>

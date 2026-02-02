@@ -119,6 +119,7 @@ export const createPost = async (req, res, next) => {
         "img",
         "h1",
         "h2",
+        "style",
       ]),
     });
 
@@ -177,7 +178,15 @@ export const updatePost = async (req, res, next) => {
     const data = {};
     if (req.body.title) data.title = req.body.title;
     if (req.body.excerpt) data.excerpt = req.body.excerpt;
-    if (req.body.content) data.content = sanitizeHtml(req.body.content);
+    if (req.body.content)
+      data.content = sanitizeHtml(req.body.content, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+          "img",
+          "h1",
+          "h2",
+          "style",
+        ]),
+      });
     if (req.body.tags)
       data.tags = req.body.tags
         .split(",")
