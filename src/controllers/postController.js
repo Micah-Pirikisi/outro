@@ -121,6 +121,9 @@ export const createPost = async (req, res, next) => {
         "h2",
         "style",
       ]),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+      },
     });
 
     const post = await prisma.post.create({
@@ -186,6 +189,9 @@ export const updatePost = async (req, res, next) => {
           "h2",
           "style",
         ]),
+        allowedAttributes: {
+          ...sanitizeHtml.defaults.allowedAttributes,
+        },
       });
     if (req.body.tags)
       data.tags = req.body.tags
