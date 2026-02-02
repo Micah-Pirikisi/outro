@@ -640,6 +640,26 @@ main {
   transform: translateX(5px);
 }
 
+.pdf-download-btn {
+  display: inline-block;
+  background: var(--text-accent);
+  color: var(--bg-primary);
+  padding: 10px 25px;
+  text-decoration: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pdf-download-btn:hover {
+  background: var(--text-primary);
+  transform: translateX(5px);
+}
+
 /* ========== FOOTER ========== */
 footer {
   background: var(--bg-secondary);
