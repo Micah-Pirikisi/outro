@@ -148,6 +148,18 @@ header nav {
     color: var(--text-primary);
     display: block;
     width: 100%;
+    padding: 4px 0;
+    border-bottom: none;
+    transition: color 0.3s ease, background 0.2s ease;
+  }
+
+  .nav-links li a:hover {
+    color: var(--text-accent);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .nav-links li a::after {
+    display: none;
   }
 
   .nav-open .nav-links {
