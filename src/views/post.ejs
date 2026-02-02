@@ -2,7 +2,7 @@
   <h1><%= post.title %></h1>
 
   <% if (post.coverImage) { %>
-  <img src="<%= post.coverImage %>" alt="<%= post.title %>" class="cover" />
+  <img src="<%= post.coverImage.replace('/public/', '/') %>" alt="<%= post.title %>" class="cover" />
   <% } %>
 
   <div class="meta" style="margin-top: 16px; color: #777">
@@ -19,7 +19,7 @@
   <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-left: 4px solid #1a1a1a;">
     <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 14px;">Attached Document</p>
     <a 
-      href="<%= post.document %>" 
+      href="<%= post.document.replace('/public/', '/') %>" 
       download 
       style="
         display: inline-block;
