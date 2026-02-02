@@ -186,6 +186,23 @@ document.getElementById("preview-btn").addEventListener("click", () => {
     document.getElementById("post-content").value || "<p>No content</p>";
   const excerpt = document.getElementById("post-excerpt").value;
 
+  // Extract style tags and add them to document head
+  const styleRegex = /<style[^>]*>[\s\S]*?<\/style>/gi;
+  const styles = content.match(styleRegex) || [];
+  
+  // Remove existing preview styles
+  document.querySelectorAll('[data-preview-style]').forEach(el => el.remove());
+  
+  // Add new styles to head
+  styles.forEach(style => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = style;
+    wrapper.setAttribute('data-preview-style', 'true');
+    document.head.appendChild(wrapper.firstChild);
+  });
+
+  const contentWithoutStyles = content.replace(styleRegex, '');
+
   const previewHtml = `
     <h1 style="font-size: 48px; font-weight: 400; margin: 0 0 30px 0;">${title
       .replace(/</g, "&lt;")
@@ -193,7 +210,7 @@ document.getElementById("preview-btn").addEventListener("click", () => {
     <div style="color: var(--text-secondary); margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border);">
       <span style="font-size: 14px;">Preview Mode</span>
     </div>
-    <div style="line-height: 1.8; color: var(--text-primary);">${content}</div>
+    <div style="line-height: 1.8; color: var(--text-primary);">${contentWithoutStyles}</div>
   `;
 
   document.getElementById("preview-content").innerHTML = previewHtml;

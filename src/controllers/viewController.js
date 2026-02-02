@@ -100,11 +100,17 @@ export const postPage = async (req, res, next) => {
       // ignore and use original
     }
 
+    // Extract style tags from content so they can be added to document head
+    const styleRegex = /<style[^>]*>[\s\S]*?<\/style>/gi;
+    const styles = displayContent.match(styleRegex) || [];
+    const contentWithoutStyles = displayContent.replace(styleRegex, '');
+
     res.render("post", {
       title: post.title,
       post,
       comments,
-      content: displayContent,
+      content: contentWithoutStyles,
+      styles: styles.join('\n'),
       displayAuthor,
     });
   } catch (err) {
