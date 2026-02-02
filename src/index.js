@@ -43,7 +43,7 @@ app.use(
         scriptSrcAttr: ["'self'"],
       },
     },
-  })
+  }),
 );
 app.use(compression());
 app.use(morgan("dev"));

@@ -150,12 +150,16 @@ header nav {
     width: 100%;
     padding: 4px 0;
     border-bottom: none;
-    transition: color 0.3s ease, background 0.2s ease;
+    transition:
+      color 0.3s ease,
+      background 0.2s ease,
+      box-shadow 0.3s ease;
   }
 
   .nav-links li a:hover {
     color: var(--text-accent);
     background: rgba(212, 175, 55, 0.08);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3), inset 0 0 8px rgba(212, 175, 55, 0.15);
   }
 
   .nav-links li a::after {
@@ -194,7 +198,7 @@ header nav a:hover {
 /* Poem styling: preserve line breaks and use serif font */
 .poem {
   white-space: pre-wrap;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   font-size: 18px;
   line-height: 1.75;
   color: #fff;

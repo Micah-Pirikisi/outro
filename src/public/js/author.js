@@ -91,7 +91,7 @@ async function loadPosts() {
       document.getElementById("post-tags").value =
         (post.tags && post.tags[0]) || "";
       document.getElementById("post-status").value = post.status;
-    })
+    }),
   );
 
   document.querySelectorAll(".publish").forEach((btn) =>
@@ -108,7 +108,7 @@ async function loadPosts() {
         body: JSON.stringify({ status }),
       });
       loadPosts();
-    })
+    }),
   );
 
   document.querySelectorAll(".delete").forEach((btn) =>
@@ -120,7 +120,7 @@ async function loadPosts() {
         headers: { Authorization: `Bearer ${token}` },
       });
       loadPosts();
-    })
+    }),
   );
 }
 
@@ -273,7 +273,7 @@ async function loadPendingComments() {
         headers: { Authorization: `Bearer ${token}` },
       });
       loadPendingComments();
-    })
+    }),
   );
 
   // Attach event listeners to delete buttons
@@ -286,7 +286,7 @@ async function loadPendingComments() {
         headers: { Authorization: `Bearer ${token}` },
       });
       loadPendingComments();
-    })
+    }),
   );
 }
 
