@@ -140,8 +140,10 @@ document.getElementById("post-form").addEventListener("submit", async (e) => {
   // tags is a single category value from the select
   form.append("tags", document.getElementById("post-tags").value);
   form.append("status", document.getElementById("post-status").value);
-  const file = document.getElementById("coverImage").files[0];
-  if (file) form.append("coverImage", file);
+  const coverImageFile = document.getElementById("coverImage").files[0];
+  if (coverImageFile) form.append("coverImage", coverImageFile);
+  const documentFile = document.getElementById("document").files[0];
+  if (documentFile) form.append("document", documentFile);
 
   const url = id ? `/api/v1/posts/${id}` : "/api/v1/posts";
   const method = id ? "PUT" : "POST";
