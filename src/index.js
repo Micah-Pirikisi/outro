@@ -26,7 +26,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Ensure uploads directory exists
-const uploadsDir = join(__dirname, "public", "uploads");
+const uploadsDir = join(process.cwd(), "public", "uploads");
 mkdirSync(uploadsDir, { recursive: true });
 
 // Trust proxy (Railway sets X-Forwarded-For header)
@@ -56,8 +56,9 @@ const limiter = rateLimit({ windowMs: 60 * 1000, max: 120 });
 app.use(limiter);
 
 // Serve static files
-app.use("/public", express.static(join(__dirname, "public")));
-app.use("/uploads", express.static(join(__dirname, "public", "uploads")));
+const publicDir = join(process.cwd(), "public");
+app.use("/public", express.static(publicDir));
+app.use("/uploads", express.static(join(publicDir, "uploads")));
 
 // View engine configuration
 app.use(expressEjsLayouts);
