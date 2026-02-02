@@ -131,10 +131,10 @@ export const createPost = async (req, res, next) => {
         status: req.body.status || "draft",
         publishedAt: req.body.status === "published" ? new Date() : null,
         coverImage: req.files?.coverImage
-          ? `/public/uploads/${req.files.coverImage[0].filename}`
+          ? `/uploads/${req.files.coverImage[0].filename}`
           : null,
         document: req.files?.document
-          ? `/public/uploads/${req.files.document[0].filename}`
+          ? `/uploads/${req.files.document[0].filename}`
           : null,
         tags: tags
           ? tags
@@ -184,9 +184,9 @@ export const updatePost = async (req, res, next) => {
         .map((t) => t.trim())
         .filter(Boolean);
     if (req.files?.coverImage)
-      data.coverImage = `/public/uploads/${req.files.coverImage[0].filename}`;
+      data.coverImage = `/uploads/${req.files.coverImage[0].filename}`;
     if (req.files?.document)
-      data.document = `/public/uploads/${req.files.document[0].filename}`;
+      data.document = `/uploads/${req.files.document[0].filename}`;
 
     const updated = await prisma.post.update({ where: { id }, data });
     res.json(updated);
