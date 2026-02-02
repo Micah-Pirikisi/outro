@@ -50,7 +50,6 @@ app.use(morgan("dev"));
 
 // Serve static files BEFORE rate limiting
 const publicDir = join(__dirname, "public");
-const uploadsDir = join(process.cwd(), "public", "uploads");
 app.use("/public", express.static(publicDir));
 app.use("/uploads", express.static(uploadsDir));
 
