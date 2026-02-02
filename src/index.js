@@ -9,6 +9,7 @@ import rateLimit from "express-rate-limit";
 import prisma from "./lib/prisma.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { mkdirSync } from "fs";
 
 import expressEjsLayouts from "express-ejs-layouts";
 
@@ -23,6 +24,10 @@ const PORT = process.env.PORT || 3000;
 // Fix __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Ensure uploads directory exists
+const uploadsDir = join(__dirname, "public", "uploads");
+mkdirSync(uploadsDir, { recursive: true });
 
 // Trust proxy (Railway sets X-Forwarded-For header)
 app.set("trust proxy", 1);
