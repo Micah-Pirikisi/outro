@@ -31,6 +31,7 @@ model Post {
   status      String    @default("draft") // draft, published, archived
   publishedAt DateTime?
   coverImage  String?
+  document    String?
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String
   comments    Comment[]

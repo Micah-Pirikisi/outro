@@ -23,7 +23,24 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) =>
     cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "-")),
 });
-const upload = multer({ storage });
+
+const fileFilter = (req, file, cb) => {
+  // Allow images for coverImage and PDFs for document
+  const allowedMimeTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "application/pdf",
+  ];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error(`Invalid file type: ${file.mimetype}`), false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
 
 // Public routes
 router.get("/", listPosts);
@@ -36,13 +53,24 @@ router.get("/:slug", getPost);
 router.post(
   "/",
   auth,
-  upload.single("coverImage"),
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "document", maxCount: 1 },
+  ]),
   body("title").isLength({ min: 3 }),
   body("content").isLength({ min: 10 }),
-  createPost
+  createPost,
 );
 
-router.put("/:id", auth, upload.single("coverImage"), updatePost);
+router.put(
+  "/:id",
+  auth,
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "document", maxCount: 1 },
+  ]),
+  updatePost,
+);
 router.patch("/:id/publish", auth, togglePublishPost);
 router.delete("/:id", auth, deletePost);
 

@@ -76,10 +76,14 @@ export const getPost = async (req, res, next) => {
 export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const post = await prisma.post.findUnique({ where: { id }, include: { author: true, comments: true } });
-    if (!post) return res.status(404).json({ error: 'Not found' });
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: { author: true, comments: true },
+    });
+    if (!post) return res.status(404).json({ error: "Not found" });
     // allow owner or admin
-    if (post.authorId !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
+    if (post.authorId !== req.user.id && req.user.role !== "admin")
+      return res.status(403).json({ error: "Forbidden" });
     res.json(post);
   } catch (err) {
     next(err);
@@ -97,11 +101,9 @@ export const createPost = async (req, res, next) => {
       .split(/\s+/)
       .filter((w) => w.length > 0).length;
     if (wordCount > 6000) {
-      return res
-        .status(400)
-        .json({
-          error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
-        });
+      return res.status(400).json({
+        error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
+      });
     }
 
     // Slug generation
@@ -128,7 +130,12 @@ export const createPost = async (req, res, next) => {
         content: sanitized,
         status: req.body.status || "draft",
         publishedAt: req.body.status === "published" ? new Date() : null,
-        coverImage: req.file ? `/public/uploads/${req.file.filename}` : null,
+        coverImage: req.files?.coverImage
+          ? `/public/uploads/${req.files.coverImage[0].filename}`
+          : null,
+        document: req.files?.document
+          ? `/public/uploads/${req.files.document[0].filename}`
+          : null,
         tags: tags
           ? tags
               .split(",")
@@ -161,11 +168,9 @@ export const updatePost = async (req, res, next) => {
         .split(/\s+/)
         .filter((w) => w.length > 0).length;
       if (wordCount > 6000) {
-        return res
-          .status(400)
-          .json({
-            error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
-          });
+        return res.status(400).json({
+          error: `Content must be at most 6000 words. Current: ${wordCount} words.`,
+        });
       }
     }
 
@@ -178,7 +183,10 @@ export const updatePost = async (req, res, next) => {
         .split(",")
         .map((t) => t.trim())
         .filter(Boolean);
-    if (req.file) data.coverImage = `/public/uploads/${req.file.filename}`;
+    if (req.files?.coverImage)
+      data.coverImage = `/public/uploads/${req.files.coverImage[0].filename}`;
+    if (req.files?.document)
+      data.document = `/public/uploads/${req.files.document[0].filename}`;
 
     const updated = await prisma.post.update({ where: { id }, data });
     res.json(updated);
