@@ -53,7 +53,6 @@ app.use(limiter);
 // Serve static files
 app.use("/public", express.static(join(__dirname, "public")));
 app.use("/uploads", express.static(join(__dirname, "public", "uploads")));
-app.use("/public/uploads", express.static(join(__dirname, "public", "uploads")));
 
 // View engine configuration
 app.use(expressEjsLayouts);
