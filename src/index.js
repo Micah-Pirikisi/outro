@@ -49,9 +49,10 @@ app.use(compression());
 app.use(morgan("dev"));
 
 // Serve static files BEFORE rate limiting
-const publicDir = join(process.cwd(), "public");
+const publicDir = join(__dirname, "public");
+const uploadsDir = join(process.cwd(), "public", "uploads");
 app.use("/public", express.static(publicDir));
-app.use("/uploads", express.static(join(publicDir, "uploads")));
+app.use("/uploads", express.static(uploadsDir));
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
