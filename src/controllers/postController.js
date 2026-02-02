@@ -119,10 +119,18 @@ export const createPost = async (req, res, next) => {
         "img",
         "h1",
         "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "p",
+        "div",
+        "span",
         "style",
       ]),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
+        "*": ["style", "class"],
       },
     });
 
@@ -187,10 +195,18 @@ export const updatePost = async (req, res, next) => {
           "img",
           "h1",
           "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "p",
+          "div",
+          "span",
           "style",
         ]),
         allowedAttributes: {
           ...sanitizeHtml.defaults.allowedAttributes,
+          "*": ["style", "class"],
         },
       });
     if (req.body.tags)
