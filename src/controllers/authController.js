@@ -24,10 +24,13 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.debug("[auth] login attempt for:", { email });
     const user = await prisma.user.findUnique({ where: { email } });
+    console.debug("[auth] user found:", Boolean(user));
     if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
     const ok = await bcrypt.compare(password, user.password);
+    console.debug("[auth] password match:", ok);
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
     const token = jwt.sign(
