@@ -41,6 +41,7 @@ app.use(
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         scriptSrcAttr: ["'self'"],
+        mediaSrc: ["'self'"],
       },
     },
   }),
