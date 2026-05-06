@@ -933,13 +933,13 @@ footer a:hover {
   }
 
   header nav {
-    flex-direction: column;
+    flex-direction: row;
     padding: 0 20px;
-    gap: 15px;
+    gap: 0;
   }
 
   header nav a:first-child {
-    margin-bottom: 15px;
+    margin-bottom: 0;
   }
 
   header nav a {
