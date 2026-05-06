@@ -67,16 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
     autoTimer = setInterval(() => rotate(1), 8500);
   };
 
-  wheel.addEventListener(
-    "wheel",
-    (event) => {
-      event.preventDefault();
-      if (Math.abs(event.deltaY) < 8) return;
-      rotate(event.deltaY > 0 ? 1 : -1);
-      restartAuto();
-    },
-    { passive: false },
-  );
+  const prevBtn = wheel.querySelector(".wheel-arrow--prev");
+  const nextBtn = wheel.querySelector(".wheel-arrow--next");
+  if (prevBtn) prevBtn.addEventListener("click", () => { rotate(-1); restartAuto(); });
+  if (nextBtn) nextBtn.addEventListener("click", () => { rotate(1); restartAuto(); });
 
   wheel.addEventListener("touchstart", (event) => {
     touchStartY = event.changedTouches[0].clientY;

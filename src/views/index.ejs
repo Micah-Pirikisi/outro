@@ -35,6 +35,11 @@
   </article>
   <% }) %>
 
+  <% if (posts.length > 1) { %>
+  <button class="wheel-arrow wheel-arrow--prev" aria-label="Previous story">&#8249;</button>
+  <button class="wheel-arrow wheel-arrow--next" aria-label="Next story">&#8250;</button>
+  <% } %>
+
   <p class="story-wheel-meta">
     <span data-current-slide>1</span> / <span><%= posts.length %></span>
   </p>
