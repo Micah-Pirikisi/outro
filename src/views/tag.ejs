@@ -29,8 +29,8 @@
         style="
           background: linear-gradient(
             135deg,
-            rgba(212, 175, 55, 0.06) 0%,
-            rgba(212, 175, 55, 0.02) 100%
+            rgba(212, 175, 55, 0.1) 0%,
+            rgba(212, 175, 55, 0.05) 100%
           );
           display: flex;
           align-items: center;
@@ -38,16 +38,28 @@
           color: var(--text-secondary);
         "
       >
-        Story Cover
+        <span>Story Cover</span>
       </div>
       <% } %>
-      <span class="type"><%= tag.toUpperCase() %></span>
+
+      <span class="type">
+        <% const typeMap = { 'novel': 'NOVEL', 'script': 'SCRIPT', 'poetry':
+        'POEM', 'short-story': 'SHORT STORY' }; const storyType =
+        p.tags?.[0]?.toLowerCase() || 'STORY'; %> <%= typeMap[storyType] ||
+        'STORY' %>
+      </span>
       <h3><%= p.title %></h3>
       <p class="meta">
         By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new
         Date(p.publishedAt).toLocaleDateString() : 'Unreleased' %>
       </p>
-      <p class="excerpt"><%= p.excerpt || p.content.substring(0, 120) %>...</p>
+
+      <% if (p.excerpt) { %>
+      <p class="excerpt"><%= p.excerpt %></p>
+      <% } else { %>
+      <p class="excerpt"><%= p.content.substring(0, 120) %>...</p>
+      <% } %>
+
       <a href="/post/<%= p.slug %>">Open Story</a>
     </article>
     <% }) %>
