@@ -52,7 +52,7 @@ header {
     rgba(15, 15, 15, 0.8) 100%
   );
   border-bottom: 1px solid var(--border);
-  padding: 30px 0;
+  padding: 16px 0;
   position: sticky;
   top: 0;
   z-index: 1000; /* ensure header/nav sits above content */
@@ -825,7 +825,7 @@ main:has(.story-wheel) + footer {
 footer {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border);
-  padding: 20px 40px;
+  padding: 10px 40px;
   margin-top: 100px;
   text-align: center;
 }
