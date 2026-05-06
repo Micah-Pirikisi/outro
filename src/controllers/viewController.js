@@ -5,7 +5,7 @@ export const homePage = async (req, res, next) => {
   try {
     const posts = await prisma.post.findMany({
       where: { status: "published" },
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { publishedAt: "desc" }],
       include: { author: true },
     });
     res.render("index", { title: "Home", posts });

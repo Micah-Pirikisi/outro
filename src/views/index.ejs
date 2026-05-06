@@ -1,11 +1,4 @@
-<% include('partials/hero') %>
-
-<!-- Subtle dedication banner matching the Why? dedication styling -->
-<div style="text-align:center; margin-top:18px; margin-bottom:40px; color:#888; font-style:italic;">
-  <div>Where dreams rest...</div>
-</div>
-
-<% if (posts.length === 0) { %>
+<% if (!posts || posts.length === 0) { %>
 <div
   style="text-align: center; padding: 100px 40px; color: var(--text-secondary)"
 >
@@ -14,128 +7,36 @@
     For now.
   </p>
 </div>
-
-<!-- PLACEHOLDER SECTION - REMOVE WHEN YOU HAVE REAL POSTS -->
-<section class="posts">
-  <% for (let i = 0; i < 4; i++) { %>
-  <article class="post-card">
-    <div
-      class="cover"
-      style="
-        background: linear-gradient(
-          135deg,
-          rgba(212, 175, 55, 0.1) 0%,
-          rgba(212, 175, 55, 0.05) 100%
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-secondary);
-      "
-    >
-      <span>Story Cover</span>
-    </div>
-    <span class="type">NOVEL</span>
-    <h3>Sample Story <%= i + 1 %></h3>
-    <p class="meta">Anonymous — <%= new Date().toLocaleDateString() %></p>
-    <p class="excerpt">
-      This is a placeholder for your literary collection. Share novels, scripts,
-      short stories, and poetry in this vault.
-    </p>
-    <a href="#">Read Story</a>
-  </article>
-  <% } %>
-</section>
 <% } else { %>
-<!-- FEATURED STORIES - FIRST TWO POSTS -->
-<% if (posts.length > 0) { %>
-<section style="margin-bottom: 100px">
-  <% posts.slice(0, 2).forEach(p => { %>
-  <article class="featured-post">
-    <div>
-      <span class="type">
-        <% const typeMap = { 'novel': 'NOVEL', 'script': 'SCRIPT', 'poetry':
-        'POEM', 'short-story': 'SHORT STORY' }; const storyType =
-        p.tags?.[0]?.toLowerCase() || 'STORY'; %> <%= typeMap[storyType] ||
-        'STORY' %>
-      </span>
-      <h2><%= p.title %></h2>
-      <p class="meta">By <%= p.author?.name || p.author?.email %></p>
-      <p class="excerpt">
-        <%= p.excerpt || p.content.substring(0, 200) + '...' %>
-      </p>
-      <a href="/post/<%= p.slug %>">Open Story</a>
-    </div>
+<section class="story-wheel" id="story-wheel" aria-label="Story wheel">
+  <% posts.forEach((p, index) => { const excerptText = (p.excerpt || p.content
+  || '').replace(/<[^>]*>/g, '').trim(); const placeholderText = excerptText ?
+  excerptText.substring(0, 240) + (excerptText.length > 240 ? '...' : '') :
+  'A new story waits here.'; %>
+  <article
+    class="story-slide <%= index === 0 ? 'is-active' : '' %>"
+    data-slide-index="<%= index %>"
+    aria-hidden="<%= index === 0 ? 'false' : 'true' %>"
+  >
     <% if (p.coverImage) { %>
-    <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover" />
+    <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="story-wallpaper" />
     <% } else { %>
-    <div
-      class="cover"
-      style="
-        background: linear-gradient(
-          135deg,
-          rgba(212, 175, 55, 0.1) 0%,
-          rgba(212, 175, 55, 0.05) 100%
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-secondary);
-      "
-    >
-      <span>Story Cover</span>
+    <div class="story-placeholder-wallpaper">
+      <p><%= placeholderText %></p>
     </div>
     <% } %>
+
+    <div class="story-overlay"></div>
+
+    <div class="story-content">
+      <h1 class="story-title"><%= p.title %></h1>
+      <a class="story-read-btn" href="/post/<%= p.slug %>">Read Story</a>
+    </div>
   </article>
   <% }) %>
-</section>
-<% } %>
 
-<!-- ALL STORIES GRID -->
-<section class="posts">
-  <% posts.forEach(p => { %>
-  <article class="post-card">
-    <% if (p.coverImage) { %>
-    <img src="<%= p.coverImage %>" alt="<%= p.title %>" class="cover" />
-    <% } else { %>
-    <div
-      class="cover"
-      style="
-        background: linear-gradient(
-          135deg,
-          rgba(212, 175, 55, 0.1) 0%,
-          rgba(212, 175, 55, 0.05) 100%
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-secondary);
-      "
-    >
-      <span>Story Cover</span>
-    </div>
-    <% } %>
-
-    <span class="type">
-      <% const typeMap = { 'novel': 'NOVEL', 'script': 'SCRIPT', 'poetry':
-      'POEM', 'short-story': 'SHORT STORY' }; const storyType =
-      p.tags?.[0]?.toLowerCase() || 'STORY'; %> <%= typeMap[storyType] ||
-      'STORY' %>
-    </span>
-    <h3><%= p.title %></h3>
-    <p class="meta">
-      By <%= p.author?.name || p.author?.email %> — <%= p.publishedAt ? new
-      Date(p.publishedAt).toLocaleDateString() : 'Unreleased' %>
-    </p>
-
-    <% if (p.excerpt) { %>
-    <p class="excerpt"><%= p.excerpt %></p>
-    <% } else { %>
-    <p class="excerpt"><%= p.content.substring(0, 120) %>...</p>
-    <% } %>
-
-    <a href="/post/<%= p.slug %>">Open Story</a>
-  </article>
-  <% }) %>
+  <p class="story-wheel-meta">
+    <span data-current-slide>1</span> / <span><%= posts.length %></span>
+  </p>
 </section>
 <% } %>
